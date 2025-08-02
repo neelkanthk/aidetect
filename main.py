@@ -35,7 +35,7 @@ def main():
 
     args = parser.parse_args()
 
-    print("[bold blue]🧠 AI Content Detector CLI[/bold blue]")
+    print("[bold blue]🧠 AI Detect - An AI Content Detector Tool[/bold blue]")
 
     try:
         # Parse the input file based on its type
