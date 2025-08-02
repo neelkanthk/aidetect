@@ -1,0 +1,6 @@
+transformers
+torch
+numpy
+python-docx
+PyMuPDF
+rich
