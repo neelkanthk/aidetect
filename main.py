@@ -8,7 +8,7 @@ from parsers.pdf_parser import parse_pdf
 from parsers.docx_parser import parse_docx
 from parsers.md_parser import parse_md
 from utils.cleaner import clean_text
-from detectors.heuristics import analyze_text_stats
+from detectors.lexical_diversity import analyze_text_stats
 
 
 def parse_file(file_path):
