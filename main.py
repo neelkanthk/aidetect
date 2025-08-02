@@ -8,6 +8,7 @@ from parsers.pdf_parser import parse_pdf
 from parsers.docx_parser import parse_docx
 from parsers.md_parser import parse_md
 from utils.cleaner import clean_text
+from detectors.heuristics import analyze_text_stats
 
 
 def parse_file(file_path):
@@ -43,7 +44,10 @@ def main():
         # Clean and preprocess the text
         text = clean_text(raw_text)
 
-        print(text)
+        # Lexical Diversity analysis stats
+        lexical_diversity_stats = analyze_text_stats(text)
+
+        print(lexical_diversity_stats)
     except Exception as e:
         print(f"[bold red]Error:[/bold red] {str(e)}")
         return
