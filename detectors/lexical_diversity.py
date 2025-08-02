@@ -67,9 +67,9 @@ def calculate_avg_sentence_length(sentences: list) -> float:
     return average_length
 
 
-def analyze_text_stats(cleaned_text: str) -> dict:
+def lex_diversity(cleaned_text: str) -> dict:
     """
-        Analyzes statistical properties of text
+        Analyzes lexical diversity properties of text
         to help detect AI-generated content.
     """
 
