@@ -25,8 +25,6 @@ def evaluate_perplexity(text):
         )
         end = time.time()
         print(f"Total runtime of the program is {end - start} seconds")
-        print(results)
-        exit(0)
         return results['perplexities'][0]
 
     except Exception as e:

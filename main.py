@@ -51,7 +51,19 @@ def main():
         # Estimate perplexity of the text
         perplexity = evaluate_perplexity(text)
 
-        print(type(perplexity))
+        print("[bold green]Analysis Complete![/bold green]")
+        print(f"Lexical Diversity Stats: {lexical_diversity_stats}")
+        print(f"Perplexity: {perplexity}")
+        if args.json:
+            output = {
+                "lexical_diversity": lexical_diversity_stats,
+                "perplexity": perplexity
+            }
+            print(json.dumps(output, indent=2))
+        else:
+            print(f"Lexical Diversity Stats: {lexical_diversity_stats}")
+            print(f"Perplexity: {perplexity}")
+
     except Exception as e:
         print(f"[bold red]Error:[/bold red] {str(e)}")
         return
