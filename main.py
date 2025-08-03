@@ -3,28 +3,28 @@ from rich import print
 import json
 import os
 import magic
-from parsers.txt_parser import parse_txt
-from parsers.pdf_parser import parse_pdf
-from parsers.docx_parser import parse_docx
-from parsers.md_parser import parse_md
 from utils.cleaner import clean_text
 from detectors.lexical_diversity import lex_diversity
 from detectors.perplexity import evaluate_perplexity
+from parsers.PdfParser import PdfParser
+from parsers.TxtParser import TxtParser
+from parsers.DocxParser import DocxParser
+from utils.FileUtility import FileUtility
+from utils.TextUtility import TextUtility
 
 
 def parse_file(file_path):
-    ext = os.path.splitext(file_path)[-1].lower()
-    mime = magic.Magic(mime=True)
-    mime_type = mime.from_file(file_path)
+    """    Parses the input file based on its type and returns the raw text.   """
+
+    ext = FileUtility.get_file_extension(file_path)
+    mime_type = FileUtility.get_file_mime(file_path)
 
     if mime_type == "text/plain" and ext in [".txt"]:
-        return parse_txt(file_path)
+        return TxtParser(file_path).parse()
     elif mime_type == "application/pdf" and ext == ".pdf":
-        return parse_pdf(file_path)
+        return PdfParser(file_path).parse()
     elif mime_type == "application/vnd.openxmlformats-officedocument.wordprocessingml.document" and ext in [".docx", ".doc"]:
-        return parse_docx(file_path)
-    elif mime_type == "text/markdown" and ext in [".md"]:
-        return parse_md(file_path)
+        return DocxParser(file_path).parse()
     else:
         raise ValueError("Unsupported file format.")
 
@@ -43,7 +43,7 @@ def main():
         raw_text = parse_file(args.filepath)
 
         # Clean and preprocess the text
-        text = clean_text(raw_text)
+        text = TextUtility.clean_text(raw_text)
 
         # Lexical Diversity analysis stats
         lexical_diversity_stats = lex_diversity(text)
