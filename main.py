@@ -9,6 +9,7 @@ from parsers.docx_parser import parse_docx
 from parsers.md_parser import parse_md
 from utils.cleaner import clean_text
 from detectors.lexical_diversity import lex_diversity
+from detectors.perplexity import evaluate_perplexity
 
 
 def parse_file(file_path):
@@ -47,7 +48,10 @@ def main():
         # Lexical Diversity analysis stats
         lexical_diversity_stats = lex_diversity(text)
 
-        print(lexical_diversity_stats)
+        # Estimate perplexity of the text
+        perplexity = evaluate_perplexity(text)
+
+        print(type(perplexity))
     except Exception as e:
         print(f"[bold red]Error:[/bold red] {str(e)}")
         return
