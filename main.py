@@ -4,13 +4,14 @@ import json
 import os
 import magic
 from utils.cleaner import clean_text
-from detectors.lexical_diversity import lex_diversity
-from detectors.perplexity import evaluate_perplexity
 from parsers.PdfParser import PdfParser
 from parsers.TxtParser import TxtParser
 from parsers.DocxParser import DocxParser
 from utils.FileUtility import FileUtility
 from utils.TextUtility import TextUtility
+from detectors.Perplexity import Perplexity
+from detectors.LexicalDiversity import LexicalDiversity
+from detectors.Perplexity import Perplexity
 
 
 def parse_file(file_path):
@@ -36,6 +37,9 @@ def main():
 
     args = parser.parse_args()
 
+    lexical_diversity_detector = LexicalDiversity()
+    perplexity_detector = Perplexity()
+
     print("[bold blue]🧠 AI Detect - An AI Content Detector Tool[/bold blue]")
 
     try:
@@ -46,14 +50,12 @@ def main():
         text = TextUtility.clean_text(raw_text)
 
         # Lexical Diversity analysis stats
-        lexical_diversity_stats = lex_diversity(text)
+        lexical_diversity_stats = LexicalDiversity(text).calculate()
 
         # Estimate perplexity of the text
-        perplexity = evaluate_perplexity(text)
+        perplexity = Perplexity(text, model_id="Qwen/Qwen2.5-0.5B").calculate()
 
         print("[bold green]Analysis Complete![/bold green]")
-        print(f"Lexical Diversity Stats: {lexical_diversity_stats}")
-        print(f"Perplexity: {perplexity}")
         if args.json:
             output = {
                 "lexical_diversity": lexical_diversity_stats,
@@ -66,6 +68,7 @@ def main():
 
     except Exception as e:
         print(f"[bold red]Error:[/bold red] {str(e)}")
+        # print(e.with_traceback(tback=True))
         return
 
 

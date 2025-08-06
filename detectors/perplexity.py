@@ -3,30 +3,45 @@ import time
 import torch
 
 
-def evaluate_perplexity(text):
-    """
-    Evaluate the perplexity of a given text using a language model.
-    Args:
-        text (str): The input text to evaluate.
-    float: The estimated perplexity of the input text.
-    """
-    start = time.time()
-    try:
-        perplexity_metric = load("perplexity", module_type="metric")
+class Perplexity:
+    """Class to evaluate the perplexity of a given text."""
 
-        # Use GPU if available
-        device = "cuda" if torch.cuda.is_available() else "cpu"
-        print(f"Using device: {device}")
+    def __init__(self, text: str = "", model_id: str = "Qwen/Qwen2.5-0.5B"):
+        self.text = text
+        self.model_id = model_id
 
-        results = perplexity_metric.compute(
-            predictions=[text],
-            model_id="Qwen/Qwen2.5-0.5B",
-            device=device
-        )
-        end = time.time()
-        print(f"Total runtime of the program is {end - start} seconds")
-        return results['perplexities'][0]
+    def calculate(self) -> dict:
+        """
+        Evaluate the perplexity of a given text using a language model.
+        Perplexity is a measure of how "surprised" or "confused" a language model is by the text it processes.
 
-    except Exception as e:
-        print(f"[bold red]Error:[/bold red] {str(e)}")
-        # ToDo: Fallback to manual calculation if evaluate library is not available
+        Low Perplexity -> AI
+        High Perplexity -> HUman
+        Args:
+            text (str): The input text to evaluate.
+            model_id (str): The model ID to use for perplexity evaluation.
+        Returns:
+            dict: A dictionary containing the perplexity and model ID.
+        """
+
+        try:
+            perplexity_metric = load("perplexity", module_type="metric")
+
+            # Use GPU if available
+            device = "cuda" if torch.cuda.is_available() else "cpu"
+            print(f"Using device: {device}")
+
+            results = perplexity_metric.compute(
+                predictions=[self.text],
+                model_id=self.model_id,
+                device=device
+            )
+            perplexity = results['perplexities'][0]
+            return {
+                "perplexity": perplexity,
+                "model_id": self.model_id
+            }
+
+        except Exception as e:
+            print(f"[bold red]Error:[/bold red] {str(e)}")
+            # ToDo: Fallback to manual calculation if evaluate library is not available

@@ -27,12 +27,13 @@ class TextUtility:
         # Handle None or empty string
         if not text:
             return ""
-            # Normalize unicode characters
+
+        # Normalize unicode
         text = unicodedata.normalize('NFKC', text)
 
-        # Replace common PDF artifacts
+        # Remove PDF artifacts
         text = re.sub(r'\f', ' ', text)
-        text = re.sub(r'[˗‐‑‒–—―]', '-', text)  # Various hyphens/dashes
+        text = re.sub(r'[˗‐‑‒–—―]', '-', text)
 
         # Remove markdown formatting
         text = re.sub(r'[#*`_~\[\]()]', '', text)
@@ -42,10 +43,13 @@ class TextUtility:
         text = re.sub(r'[''′`]', "'", text)
         text = re.sub(r'[""″]', '"', text)
 
-        # Remove non-printable characters
+        # Remove non-printable characters ← Keep this!
         text = ''.join(char for char in text if char.isprintable())
+
+        # Keep sentence-ending punctuation but remove others
+        text = re.sub(r'[^\w\s\.\!\?\-\']', ' ', text)
 
         # Normalize whitespace
         text = re.sub(r'\s+', ' ', text)
 
-        return text.strip()  # Remove leading/trailing whitespace
+        return text.strip()

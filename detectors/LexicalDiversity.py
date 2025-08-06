@@ -4,8 +4,8 @@ from lexicalrichness import LexicalRichness
 
 
 class LexicalDiversity:
-    def __init__(self, text: str):
-        pass
+    def __init__(self, cleaned_text: str = ""):
+        self.cleaned_text = cleaned_text
 
     def calculate_lexical_diversity_metrics(self, words: list) -> dict:
         """
@@ -30,7 +30,7 @@ class LexicalDiversity:
             "yule_k": float(lex.yulek)  # Yule's K
         }
 
-    def extract_sentences(text: str) -> list:
+    def extract_sentences(self, text: str) -> list:
         """
         Splits the input text into sentences using punctuation marks (., !, ?).
         Returns a list of cleaned sentences.
@@ -48,7 +48,7 @@ class LexicalDiversity:
         # Return the list of cleaned sentences
         return cleaned_sentences
 
-    def calculate_avg_sentence_length(sentences: list) -> float:
+    def calculate_avg_sentence_length(self, sentences: list) -> float:
         """
         Calculate the average number of words per sentence.
         """
@@ -68,17 +68,17 @@ class LexicalDiversity:
 
         return average_length
 
-    def lex_diversity(self, cleaned_text: str) -> dict:
+    def calculate(self) -> dict:
         """
             Analyzes lexical diversity properties of text
             to help detect AI-generated content.
         """
 
-        sentences = self.extract_sentences(cleaned_text)
+        sentences = self.extract_sentences(self.cleaned_text)
 
         avg_sentence_len = self.calculate_avg_sentence_length(sentences)
 
-        words = cleaned_text.split()
+        words = self.cleaned_text.split()
         # Calculate lexical diversity
         lexical_diversity = self.calculate_lexical_diversity_metrics(words)
         return {
